@@ -1,0 +1,23 @@
+.outside-layout .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.outside-layout .topbar > nav {
+    display: flex;
+    gap: 20px;
+}
+
+.outside-layout .topbar > nav a {
+    color: rgba(0, 0, 0, 0.55);
+    text-decoration: none;
+}
+
+.outside-layout .topbar > nav a.active {
+    color: rgba(0, 0, 0, 0.9);
+}
+
+.outside-layout .item-details {
+    margin-top: 1.5rem;
+}

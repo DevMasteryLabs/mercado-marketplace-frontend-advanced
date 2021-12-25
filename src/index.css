@@ -1,0 +1,90 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #060927;
+  --secondary-color: #1360ef;
+  --tertiary-color: #f5f5f5;
+}
+
+body {
+  font-family: sans-serif;
+  background-color: var(--tertiary-color);
+}
+
+.toast-success div {
+  background-color: green;
+}
+
+.toast-error div {
+  background-color: red;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.topbar {
+  height: 67.8px;
+  background-color: var(--tertiary-color);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  position: sticky;
+  z-index: 1;
+  top: 0;
+}
+
+.items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-gap: 2rem;
+  justify-items: stretch;
+  align-items: stretch;
+}
+
+.custom-container {
+  max-width: 768px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.item-card {
+  transition: box-shadow 0.5s;
+}
+
+.item-card:hover {
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px !important;
+}
+
+.card-btns a, .card-btns button {
+ border-radius: 50%;
+}
+
+.card-btns button {
+  padding: 6px 7px;
+}
+
+.fit-image {
+  width: auto;
+  height: 62%;
+  object-fit: cover;
+}
+
+.image-size {
+  width: 100%;
+  max-width: 480px;
+}
+
+.gr-edit path {
+  stroke: currentColor;
+}
+
+.not-found-page-image {
+  width: 100%;
+  max-width: 600px;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+}
