@@ -1,7 +1,9 @@
 import {
-   SET_ALL_ITEMS,
-   SELECT_ITEM,
-   REMOVE_ITEM
+    SET_ALL_ITEMS,
+    SELECT_ITEM,
+    REMOVE_ITEM,
+    UPDATE_ITEM,
+    ADD_ITEM
 } from '../types/itemsTypes';
 
 const initialState = {
@@ -9,14 +11,18 @@ const initialState = {
     selected: null
 };
 
-const itemsReducer = (state = initialState , action) => {
+const itemsReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_ALL_ITEMS:
-            return {...state, all: action.payload};
+            return { ...state, all: action.payload };
         case SELECT_ITEM:
-            return {...state, selected: action.payload || null};       
+            return { ...state, selected: action.payload || null };
         case REMOVE_ITEM:
-            return {...state, all: state.all.filter(item => item._id !== action.payload)};       
+            return { ...state, all: state.all.filter(item => item._id !== action.payload) };
+        case UPDATE_ITEM:
+            return { ...state, all: state.all.map(item => item._id === action.payload.id ? { ...item, ...action.payload.data } : item) };
+        case ADD_ITEM:
+            return { ...state, all: [...state.all, action.payload] };
         default:
             return state;
     }

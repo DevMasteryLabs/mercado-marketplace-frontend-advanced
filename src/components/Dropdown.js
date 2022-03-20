@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { NavLink, useHistory } from 'react-router-dom'
 
 import { logout } from '../redux/actions/userActionCreators'
-
 import ProfilePicture from './ProfilePicture'
 
 function Dropdown() {
@@ -20,8 +19,6 @@ function Dropdown() {
                 <li><NavLink className="dropdown-item" to="/profile">Profile</NavLink></li>
                 <li><hr className="dropdown-divider" /></li>
                 <li><button className="dropdown-item" onClick={() => {
-                    localStorage.removeItem('token')
-                    localStorage.removeItem('user')
                     dispatch(logout())
                     history.push('/login')
                 }}>Sign out</button></li>

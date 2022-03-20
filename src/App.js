@@ -2,6 +2,7 @@ import {
   BrowserRouter as Router,
   Switch
 } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import PublicRoute from './routes/PublicRoute';
 import PrivateRoute from './routes/PrivateRoute';
@@ -15,9 +16,9 @@ import Items from './pages/Items';
 import CreateItem from './pages/CreateItem';
 import UpdateItem from './pages/UpdateItem';
 import NotFound from './pages/NotFound';
-import { useDispatch } from "react-redux";
 import { login } from "./redux/actions/userActionCreators";
 import ItemDetails from "./pages/ItemDetails";
+import GlobalLoading from "./components/GlobalLoading";
 
 function App() {
   const dispatch = useDispatch()
@@ -28,21 +29,24 @@ function App() {
   }
 
   return (
-    <Router>
-      <div className="App">
-        <Switch>
-          <PublicRoute exact path="/" component={Home} />
-          <PublicRoute exact path="/login" component={Login} />
-          <PublicRoute exact path="/register" component={Register} />
-          <PrivateRoute exact path='/profile' component={Profile} />
-          <PrivateRoute exact path='/items' component={Items} />
-          <PrivateRoute exact path='/create-item' component={CreateItem} />
-          <PrivateRoute exact path='/update-item/:id' component={UpdateItem} />
-          <CustomRoute exact path='/items/:id' component={ItemDetails} />
-          <CustomRoute component={NotFound} />
-        </Switch>
-      </div>
-    </Router>
+    <>
+      <GlobalLoading />
+      <Router>
+        <div className="App">
+          <Switch>
+            <PublicRoute exact path="/" component={Home} />
+            <PublicRoute exact path="/login" component={Login} />
+            <PublicRoute exact path="/register" component={Register} />
+            <PrivateRoute exact path='/profile' component={Profile} />
+            <PrivateRoute exact path='/items' component={Items} />
+            <PrivateRoute exact path='/create-item' component={CreateItem} />
+            <PrivateRoute exact path='/update-item/:id' component={UpdateItem} />
+            <CustomRoute exact path='/items/:id' component={ItemDetails} />
+            <CustomRoute component={NotFound} />
+          </Switch>
+        </div>
+      </Router>
+    </>
   );
 }
 

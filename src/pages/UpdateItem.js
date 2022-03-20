@@ -1,17 +1,16 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Button from 'react-bootstrap/Button'
+import { useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import Input from "../components/Input";
-import { alertError, alertSuccess } from "../utils/feedback";
-import { useHistory } from "react-router-dom";
-import { useParams } from "react-router-dom";
-
+import { fetchItemById, requestUpdatingItem } from "../redux/actions/itemsActionCreators";
 
 function UpdateItem() {
     const history = useHistory()
-    const token = useSelector(state => state.user.token)
+    const selectedItem = useSelector(state => state.items.selected)
+    const dispatch = useDispatch()
     const {id} = useParams()
     const [itemData, setItemData] = useState({
         title: '',
@@ -19,42 +18,26 @@ function UpdateItem() {
         photo: '',
         price: ''
     })
-    const getItemById = async (id) => {
-        try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/items/${id}`)
-            const {title, description, photo, price} = res.data
-            setItemData({title, description, photo, price})
-        } catch (error) {
-            alertError(error.message) 
-        }
-    }
     useEffect(() => {
-        getItemById(id)
-    }, [id])
+        if (selectedItem) {
+            setItemData(selectedItem)
+        }
+    }, [selectedItem])
+
+    useEffect(() => {
+        dispatch(fetchItemById(id))
+    }, [dispatch, id])
     
     async function handleSubmit(e) {
-        try {
-            e.preventDefault()
-            console.log(itemData);
-            const res = await axios.put(`${process.env.REACT_APP_API_URL}/items/${id}`, itemData, {headers: {authorization: token}})
-            console.log({res});
-            if (res.data && res.data.message) {
-                alertSuccess(res.data.message)
-                history.push('/items')
-            }
-        } catch (err) {
-            console.log({err});
-            if (err && err.response && err.response.data && err.response.data.error && err.response.data.error.details) {
-                return alertError(err.response.data.error.details[0] && err.response.data.error.details[0].message)
-            }
-            if (err && err.response && err.response.data && err.response.data.error) {
-                return alertError(err.response.data.error)
-            }
-        }
+        e.preventDefault()
+        const { title, description, photo, price } = itemData
+        dispatch(requestUpdatingItem(id, { title, description, photo, price }, history))        
     }
+
     function handleChange(e) {
         setItemData(prevItemData => ({...prevItemData, [e.target.name]: e.target.value}))
     }
+
     return (
         <div>
             <h1>Update Item</h1>
@@ -84,7 +67,7 @@ function UpdateItem() {
                     onChange={handleChange}
                     type='number'
                 />
-                <Button type="submit" style={{width: '100%'}}>Add</Button>
+                <Button type="submit" style={{width: '100%'}}>Update</Button>
             </form>
         </div>
     )

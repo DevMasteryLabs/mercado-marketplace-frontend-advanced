@@ -1,12 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import axios from 'axios'
 import Container from 'react-bootstrap/Container'
 
 import DeleteItemModal from './DeleteItemModal'
-
-import { setAllItems, selectItem } from '../redux/actions/itemsActionCreators'
-import { alertError } from '../utils/feedback'
+import { selectItem, fetchAllItems } from '../redux/actions/itemsActionCreators'
 import ItemCard from './ItemCard'
 
 
@@ -23,18 +20,11 @@ function DisplayItems({showOnlyOwnItems}) {
         setShowModal(true)
         dispatch(selectItem(item))
     }
-
-    const getItems = async () => {
-        try {
-            const items = await axios.get(`${process.env.REACT_APP_API_URL}/items`)
-            dispatch(setAllItems(items.data))
-        } catch (error) {
-           alertError(error.message) 
-        }
-    } 
+ 
     useEffect(() => {
-        getItems()
-    }, [])
+        dispatch(fetchAllItems())
+    }, [dispatch])
+
     let items = useSelector(state => state.items.all)
     if (showOnlyOwnItems) {
         items = items.filter(item => item.user && item.user._id === userId)

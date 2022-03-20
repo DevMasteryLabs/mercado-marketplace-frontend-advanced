@@ -1,20 +1,19 @@
-import {Route} from 'react-router-dom';
-import {useSelector} from 'react-redux';
+import { Route } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import InsideLayout from '../layouts/InsideLayout';
 import OutsideLayout from '../layouts/OutsideLayout';
 
-function CustomRoute({component: Component, ...rest}) {
-    const {isAuth} = useSelector(state => state.user);
+function CustomRoute({ component: Component, ...rest }) {
+    const { isAuth } = useSelector(state => state.user);
     return (
-        <Route 
-        {...rest}
-        render={(props) => (
-            isAuth 
-            ? <InsideLayout><Component /></InsideLayout> 
-            : <OutsideLayout><Component /></OutsideLayout>
-        )}
-        
+        <Route
+            {...rest}
+            render={(props) => (
+                isAuth
+                    ? <InsideLayout><Component {...props} /></InsideLayout>
+                    : <OutsideLayout><Component {...props} /></OutsideLayout>
+            )}
         />
     )
 }

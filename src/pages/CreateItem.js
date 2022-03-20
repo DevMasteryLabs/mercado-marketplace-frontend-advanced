@@ -1,16 +1,16 @@
-import axios from "axios";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Button from 'react-bootstrap/Button'
-
-import Input from "../components/Input";
-import { alertError, alertSuccess } from "../utils/feedback";
 import { useHistory } from "react-router-dom";
 
+import Input from "../components/Input";
+import { requestCreatingItem } from "../redux/actions/itemsActionCreators";
 
-function CreateItem() {
+
+function CreateItem(props) {
+    console.log({ props });
+    const dispatch = useDispatch()
     const history = useHistory()
-    const token = useSelector(state => state.user.token)
     const [itemData, setItemData] = useState({
         title: '',
         description: '',
@@ -18,23 +18,8 @@ function CreateItem() {
         price: ''
     })
     async function handleSubmit(e) {
-        try {
-            e.preventDefault()
-            console.log(itemData);
-            const res = await axios.post(`${process.env.REACT_APP_API_URL}/items`, itemData, {headers: {authorization: token}})
-            if (res.data && res.data.message) {
-                alertSuccess(res.data.message)
-                history.push('/items')
-            }
-        } catch (err) {
-            console.log({err});
-            if (err && err.response && err.response.data && err.response.data.error && err.response.data.error.details) {
-                return alertError(err.response.data.error.details[0] && err.response.data.error.details[0].message)
-            }
-            if (err && err.response && err.response.data && err.response.data.error) {
-                return alertError(err.response.data.error)
-            }
-        }
+        e.preventDefault()
+        dispatch(requestCreatingItem(itemData, history))
     }
     function handleChange(e) {
         setItemData(prevItemData => ({...prevItemData, [e.target.name]: e.target.value}))

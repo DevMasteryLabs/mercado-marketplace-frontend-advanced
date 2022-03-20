@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import Form from '../components/Form';
 import Input from '../components/Input';
-
-import { alertError, alertSuccess } from '../utils/feedback';
-import { useHistory } from 'react-router-dom';
+import { alertError } from '../utils/feedback';
+import { requestRegister } from '../redux/actions/userActionCreators';
 
 function Login() {
+    const dispatch = useDispatch()
     const history = useHistory()
     const [registerData, setRegisterData] = useState({
         firstName: '',
@@ -18,9 +19,7 @@ function Login() {
     })
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        // dispatch(login());
-        console.log(registerData);
+        e.preventDefault();       
         const {firstName, lastName, email, password, confirmPassword} = registerData
         if (!firstName) {
             return alertError('First name is required')
@@ -40,25 +39,7 @@ function Login() {
         if (password !== confirmPassword) {
             return alertError('Passwords mismatch')
         }
-        try {
-            const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, { firstName, lastName, email, password })
-            console.log({res});
-            if (res.data && res.data.message && res.data.user && res.data.token) {
-                alertSuccess(res.data.message)
-                // localStorage.setItem('token', res.data.token)
-                // localStorage.setItem('user', JSON.stringify(res.data.user))
-            }
-            history.push('/login')
-            // dispatch(login(res.data.user, res.data.token))
-        } catch (err) {
-            console.log({err});
-            if (err && err.response && err.response.data && err.response.data.error && err.response.data.error.details) {
-                return alertError(err.response.data.error.details[0] && err.response.data.error.details[0].message)
-            }
-            if (err && err.response && err.response.data && err.response.data.error) {
-                return alertError(err.response.data.error)
-            }
-        }
+        dispatch(requestRegister({ firstName, lastName, email, password }, history))       
     }
     function handleChange(e) {
         setRegisterData(prevItemData => ({...prevItemData, [e.target.name]: e.target.value}))
